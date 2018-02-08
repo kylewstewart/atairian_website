@@ -2,7 +2,7 @@ import React from 'react';
 
 const MainContainer = () => (
   <div>
-    Hello World
+    Hi World
   </div>
 );
 
