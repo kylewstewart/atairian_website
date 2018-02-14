@@ -75,35 +75,32 @@ export const topExchanges = (fsym, tsym, limit) => {
 };
 
 export const histoDay = (fsym, tsym, options = {}) => {
-  if (options.timestamp) options.timestamp = dateToTimestamp(options.timestamp);
   let url = `${baseUrl}histoday?fsym=${fsym}&tsym=${tsym}`;
   if (options.exchange) url += `&e=${options.exchange}`;
   if (options.limit === 'none') url += '&allData=true';
   else if (options.limit) url += `&limit=${options.limit}`;
   if (options.tryConversion === false) url += '&tryConversion=false';
   if (options.aggregate) url += `&aggregate=${options.aggregate}`;
-  if (options.timestamp) url += `&toTs=${options.timestamp}`;
+  if (options.timestamp) url += `&toTs=${dateToTimestamp(options.timestamp)}`;
   return fetchJSON(url).then(result => result.Data);
 };
 
 export const histoHour = (fsym, tsym, options = {}) => {
-  if (options.timestamp) options.timestamp = dateToTimestamp(options.timestamp);
   let url = `${baseUrl}histohour?fsym=${fsym}&tsym=${tsym}`;
   if (options.exchange) url += `&e=${options.exchange}`;
   if (options.limit) url += `&limit=${options.limit}`;
   if (options.tryConversion === false) url += '&tryConversion=false';
   if (options.aggregate) url += `&aggregate=${options.aggregate}`;
-  if (options.timestamp) url += `&toTs=${options.timestamp}`;
+  if (options.timestamp) url += `&toTs=${dateToTimestamp(options.timestamp)}`;
   return fetchJSON(url).then(result => result.Data);
 };
 
 export const histoMinute = (fsym, tsym, options = {}) => {
-  if (options.timestamp) options.timestamp = dateToTimestamp(options.timestamp);
   let url = `${baseUrl}histominute?fsym=${fsym}&tsym=${tsym}`;
   if (options.exchange) url += `&e=${options.exchange}`;
   if (options.limit) url += `&limit=${options.limit}`;
   if (options.tryConversion === false) url += '&tryConversion=false';
   if (options.aggregate) url += `&aggregate=${options.aggregate}`;
-  if (options.timestamp) url += `&toTs=${options.timestamp}`;
+  if (options.timestamp) url += `&toTs=${dateToTimestamp(options.timestamp)}`;
   return fetchJSON(url).then(result => result.Data);
 };

@@ -1,9 +1,14 @@
 import React from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Image } from 'semantic-ui-react';
+import logo from '../logo.png';
 
 const NavBarContainer = () => (
   <Container>
-    menu
+    <Image
+      src={logo}
+      size="small"
+      centered
+    />
   </Container>
 );
 
