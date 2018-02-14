@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Form } from 'semantic-ui-react';
-import allCoins from '../lib/cryptocompare';
+import { allCoins, priceHistory } from '../lib/cryptocompare';
 
 class MainContainer extends Component {
   state = {
-    symbols: '',
+    symbol: '',
   }
 
   componentDidMount = () => this.getCoins();
@@ -22,6 +22,8 @@ class MainContainer extends Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
+  handleClick = () => priceHistory(this.state.symbol);
+
   render() {
     return (
       <Container>
@@ -29,13 +31,17 @@ class MainContainer extends Component {
           <Form.Dropdown
             search
             selection
-            multiple
-            value={this.state.symbols}
-            placeholder="Symbols"
-            name="symbols"
+            value={this.state.symbol}
+            placeholder="Symbol"
+            name="symbol"
             options={this.state.coinsOptions}
             onChange={this.handleChange}
-            />
+          />
+          <Form.Button
+            content="OHLC"
+            disabled={!this.state.symbol}
+            onClick={this.handleClick}
+          />
         </Form>
       </Container>
     );

@@ -1,9 +1,12 @@
 import cc from 'cryptocompare';
 import _ from 'lodash';
 
-const allCoins = async () => {
+export const allCoins = async () => {
   const { Data } = await cc.coinList();
   return _.orderBy(Data, ['Symbol']);
 };
 
-export default allCoins;
+export const priceHistory = async (symbol) => {
+  const data = await cc.histoDay(symbol, 'USD', { limit: 'none' });
+  console.log(data);
+};
