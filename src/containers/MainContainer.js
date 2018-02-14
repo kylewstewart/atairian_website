@@ -7,7 +7,10 @@ import { allCoins, priceHistory } from '../lib/cryptocompare';
 class MainContainer extends Component {
   state = {
     symbol: '',
+    coins: [],
+    coin: '',
     prices: [],
+    inputDis: false,
   }
 
   componentDidMount = () => this.getCoins();
@@ -15,6 +18,7 @@ class MainContainer extends Component {
   getCoins = async () => {
     const coins = await allCoins();
     this.setState({
+      coins,
       coinsOptions: coins.map((coin) => {
         const obj = { key: coin.Id, value: `${coin.Symbol}`, text: `${coin.Symbol}` };
         return obj;
@@ -22,11 +26,16 @@ class MainContainer extends Component {
     });
   };
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  handleChange = (e, { name, value }) => {
+    this.setState({
+      [name]: value,
+      coin: this.state.coins.find(coin => coin.Symbol === value),
+    });
+  };
 
   handleClick = async () => {
     const prices = await priceHistory(this.state.symbol);
-    this.setState({ prices });
+    this.setState({ prices, inputDis: true });
   }
 
   convertDate = (date) => {
@@ -67,6 +76,7 @@ class MainContainer extends Component {
       <Container>
         <Form>
           <Form.Dropdown
+            label="Pick a Coin"
             search
             selection
             value={this.state.symbol}
@@ -74,23 +84,35 @@ class MainContainer extends Component {
             name="symbol"
             options={this.state.coinsOptions}
             onChange={this.handleChange}
+            disabled={this.state.inputDis}
           />
-          <Form.Button
-            content="Get Data"
-            disabled={!this.state.symbol}
-            onClick={this.handleClick}
-          />
-          <Form.Button
-            disabled={!this.state.prices[0]}
-          >
-            <CSVLink
-              headers={headers}
-              data={data}
-              filename={`${this.state.symbol}-OHLC.csv`}
+          <Form.Group>
+            <Form.Button
+              content="Get Trade History"
+              disabled={!this.state.symbol || !!this.state.prices[0]}
+              onClick={this.handleClick}
+            />
+            <Form.Button
+              disabled={!this.state.prices[0]}
+              onClick={() => this.setState({ inputDis: true })}
             >
-              Download
-            </CSVLink>
-          </Form.Button>
+              <CSVLink
+                headers={headers}
+                data={data}
+                filename={`${this.state.symbol}.csv`}
+              >
+                Download
+              </CSVLink>
+            </Form.Button>
+            <Form.Button
+              content="Reset"
+              onClick={() => this.setState({
+                symbol: '',
+                prices: [],
+                inputDis: false,
+              })}
+            />
+          </Form.Group>
         </Form>
       </Container>
     );
